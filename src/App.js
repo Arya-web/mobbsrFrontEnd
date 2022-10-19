@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Register, Login, Landing } from './components'
+import { Register, Login, Landing, Landingg, ChangePass, UpdateUser, ForgotPassword } from './components'
 
 function App() {
   return (
@@ -12,6 +12,14 @@ function App() {
             element={
               <>
                 <Landing />
+              </>
+            }
+          />
+          <Route
+            path="/landingg"
+            element={
+              <>
+                <Landingg />
               </>
             }
           />
@@ -28,6 +36,30 @@ function App() {
             element={
               <>
                 <Login />
+              </>
+            }
+          />
+          <Route
+            path="/change_pass"
+            element={
+              <>
+                <ChangePass />
+              </>
+            }
+          />
+          <Route
+            path="/update_user"
+            element={
+              <>
+                <UpdateUser />
+              </>
+            }
+          />
+          <Route
+            path="/forgot_password"
+            element={
+              <>
+                <ForgotPassword />
               </>
             }
           />

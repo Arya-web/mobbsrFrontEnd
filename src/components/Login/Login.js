@@ -1,12 +1,43 @@
-import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import "./Login.css";
 const Login = () => {
   const [phone, setphone] = useState("");
   const [password, setpassword] = useState("");
   const [loading, setloading] = useState(false);
+  const [refferer, setrefferer] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state) {
+      if (typeof location.state.refferer !== "undefined") {
+        setrefferer(location.state.refferer);
+      }
+    }
+  }, []);
+
+  const handleNav = () => {
+    if (location.state) {
+      if (location.state.prevPath === "/register") {
+        navigate(-1);
+      } else {
+        navigate("/register", {
+          state: { ...location.state, prevPath: location.pathname },
+        });
+      }
+    } else {
+      navigate("/register", {
+        state: { ...location.state, prevPath: location.pathname },
+      });
+    }
+  };
+
+  const handleNavigate = (page) => {
+    navigate(`/${page}`, { state: { refferer: location.pathname } });
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -26,7 +57,7 @@ const Login = () => {
           .then((res) => {
             if (res.data.status === true) {
               sessionStorage.setItem("user", res.data.userId);
-              navigate("/");
+              navigate(`${refferer}`);
             } else {
               alert(res.data.response);
             }
@@ -89,6 +120,15 @@ const Login = () => {
                           </div>
                         </div>
 
+                        <div className="d-flex justify-content-center">
+                          <span
+                            onClick={() => handleNavigate("forgot_password")}
+                            className="link"
+                          >
+                            Forgot Password?
+                          </span>
+                        </div>
+
                         <div className="row mb-0 mt-4">
                           <div className="d-flex col-md-8 offset-md-3">
                             <button
@@ -101,15 +141,17 @@ const Login = () => {
                                 </div>
                               )}
 
-                              {!loading && <span style={{height: '32px'}}>Login</span>}
+                              {!loading && (
+                                <span style={{ height: "32px" }}>Login</span>
+                              )}
                             </button>
 
-                            <Link
-                              to="/register"
-                              className="text-decoration-none ps-4"
+                            <span
+                              onClick={handleNav}
+                              className="text-decoration-none ps-4 link"
                             >
                               Don't have an account? Register.
-                            </Link>
+                            </span>
                           </div>
                         </div>
                       </form>

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import "./Register.css";
 import axios from "axios";
 const Register = () => {
@@ -7,7 +7,33 @@ const Register = () => {
   const [phone, setphone] = useState("");
   const [password, setpassword] = useState("");
   const [loading, setloading] = useState(false);
+  const [refferer, setrefferer] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state) {
+      if (typeof location.state.refferer !== "undefined") {
+        setrefferer(location.state.refferer);
+      }
+    }
+  }, []);
+
+  const handleNav = () => {
+    if (location.state) {
+      if (location.state.prevPath === "/login") {
+        navigate(-1);
+      } else {
+        navigate("/login", {
+          state: { ...location.state, prevPath: location.pathname },
+        });
+      }
+    } else {
+      navigate("/login", {
+        state: { ...location.state, prevPath: location.pathname },
+      });
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +54,7 @@ const Register = () => {
           .then((res) => {
             if (res.data.status === true) {
               sessionStorage.setItem("user", res.data.user.phoneNumber);
-              navigate("/");
+              navigate(`${refferer}`);
             } else {
               alert(res.data.response);
             }
@@ -43,7 +69,7 @@ const Register = () => {
   };
 
   if (sessionStorage.getItem("user")) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={`${refferer}`} />;
   } else {
     return (
       <>
@@ -126,12 +152,12 @@ const Register = () => {
                               )}
                             </button>
 
-                            <Link
-                              to="/login"
-                              className="text-decoration-none ps-4"
+                            <span
+                              onClick={handleNav}
+                              className="text-decoration-none ps-4 link"
                             >
                               Have an account? Login.
-                            </Link>
+                            </span>
                           </div>
                         </div>
                       </form>

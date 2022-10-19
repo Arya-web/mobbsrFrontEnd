@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import "./Landing.css";
+import "./Landingg.css";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const Landing = () => {
+const Landingg = () => {
   const [authenticated, setauthenticated] = useState(false);
   const [loading, setloading] = useState(false);
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const Landing = () => {
           .then((res) => {
             if (res.data.status === true) {
               sessionStorage.removeItem("user");
-              navigate("/login", { state: { refferer: location.pathname } });
+              navigate("/login", { state: { refferer: location.pathname }});
             } else {
               alert(res.data.response);
             }
@@ -57,7 +57,7 @@ const Landing = () => {
         <div className="container">
           <div className="card shadow-sm">
             <div className="card-body">
-              <h1 className="main-heading">Landing Page</h1>
+              <h1 className="main-heading">Not The Landing Page</h1>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
                 molestie nunc quis felis tincidunt commodo. Mauris sodales, enim
@@ -88,42 +88,23 @@ const Landing = () => {
                 </div>
               )}
               {authenticated && (
-                <>
-                  <div className="d-flex justify-content-evenly">
-                    <span onClick={() => handleNav("update_user")}>
-                      <button
-                        type="button"
-                        className="btn btn-primary py-1 px-4"
+                <div className="d-flex justify-content-center">
+                  <button
+                    type="button"
+                    className="btn btn-primary py-1 px-4"
+                    onClick={handleLogout}
+                  >
+                    {loading && (
+                      <div
+                        className="
+                              loader-1"
                       >
-                        Update User
-                      </button>
-                    </span>
-                    <span onClick={() => handleNav("change_pass")}>
-                      <button
-                        type="button"
-                        className="btn btn-primary py-1 px-4"
-                      >
-                        Change Password
-                      </button>
-                    </span>
-                    <span>
-                      <button
-                        type="button"
-                        className="btn btn-primary py-1 px-4"
-                        onClick={handleLogout}
-                      >
-                        {loading && (
-                          <div className="loader-1">
-                            <span></span>
-                          </div>
-                        )}
-                        {!loading && (
-                          <span style={{ height: "32px" }}>Logout</span>
-                        )}
-                      </button>
-                    </span>
-                  </div>
-                </>
+                        <span></span>
+                      </div>
+                    )}
+                    {!loading && <span style={{ height: "32px" }}>Logout</span>}
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -133,4 +114,4 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+export default Landingg;
